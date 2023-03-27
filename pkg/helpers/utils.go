@@ -8,12 +8,8 @@ import (
 	"github.com/slack-go/slack"
 )
 
-const JiraBaseUrl string = "http://localhost:8080/"
 const JiraPressure int = 3
-const JiraJqlQuery string = "project = 'OpenShift Hosted Support' AND status = 'To Do' OR status = 'In Progress' AND priority >= 'High'"
-const PDScheduleID string = "P5LOJUX"
-const PDEscalationPolicy string = "PA9G4O0"
-const PDBaseUrl string = "https://pdotest.pagerduty.com/incidents/"
+const JiraJqlQuery string = "project = 'OHSS' AND (status = 'To Do' OR status = 'In Progress') AND priority >= 'High'"
 const PDPressure int = 3
 
 // Helper is a class-like struct to help quickly init other needed helpers and provide a single access point to values
@@ -30,12 +26,12 @@ func NewHelper() Helper {
 	appToken := os.Getenv("SLACK_APP_TOKEN")
 
 	// setup constants
-	helper.Jira.BaseUrl = JiraBaseUrl
+	helper.Jira.BaseUrl = os.Getenv("JIRA_BASE_URL")
 	helper.Jira.Pressure = JiraPressure
 	helper.Jira.JqlQuery = JiraJqlQuery
-	helper.PD.ScheduleID = PDScheduleID
-	helper.PD.EscalationPolicy = PDEscalationPolicy
-	helper.PD.BaseUrl = PDBaseUrl
+	helper.PD.ScheduleID = os.Getenv("PD_SCHEDULE_ID")
+	helper.PD.EscalationPolicy = os.Getenv("PD_ESCALATION_POLICY")
+	helper.PD.BaseUrl = os.Getenv("PD_BASE_URL")
 	helper.PD.Pressure = PDPressure
 
 	// setup clients
