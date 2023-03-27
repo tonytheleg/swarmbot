@@ -48,7 +48,8 @@ func main() {
 					log.Printf("failed to check pressure: %v", err)
 				}
 				if pdPressureHit || jiraPressureHit {
-					// easiest to just use the existing slash command function
+					// easiest to just use the existing slash command function but
+					// we don't want to mess with our existing command just in case
 					fakeCommand := slack.SlashCommand{
 						ChannelID: channelID,
 					}
@@ -56,7 +57,7 @@ func main() {
 					if err != nil {
 						log.Printf("failed to check pressure: %v", err)
 					}
-					// prevents swarm init from running for a while if its just run
+					// prevents swarm init from running for a while if its just been run
 					time.Sleep(60 * time.Minute)
 				} else {
 					time.Sleep(60 * time.Second)
@@ -66,10 +67,10 @@ func main() {
 	}(ctx, helper.Slack.Client)
 
 	go func(ctx context.Context, client *slack.Client, socketClient *socketmode.Client) {
-		// Create a for loop that selects either the context cancellation or the events incomming
+		// Create a for loop that selects either the context cancellation or the events incoming
 		for {
 			select {
-			// inscase context cancel is called exit the goroutine
+			// in case context cancel is called exit the goroutine
 			case <-ctx.Done():
 				log.Println("Shutting down socketmode listener")
 				return
@@ -83,13 +84,13 @@ func main() {
 					if !ok {
 						log.Printf("Cloud not type cast message to a SlashCommand: %v/n", command)
 					}
-					// Curerntly only handling slash commands but other event types could be added
+					// Currently only handling slash commands but other event types could be added
 					// in this switch like bot mentions and such
 					payload, err := handlers.HandleSlashCommand(command, helper)
 					if err != nil {
 						log.Fatal(err)
 					}
-					// dont forget to ack it
+					// don't forget to ack it
 					socketClient.Ack(*event.Request, payload)
 				}
 			}

@@ -8,8 +8,7 @@ import (
 	"github.com/PagerDuty/go-pagerduty"
 )
 
-// PDO Test values
-
+// PDHelper helps configure a client and settings needed to interact with PagerDuty
 type PDHelper struct {
 	Client           *pagerduty.Client
 	User             *pagerduty.User
@@ -85,7 +84,7 @@ func (p *PDHelper) AssignPDInc(incidentID string) error {
 	return nil
 }
 
-// CheckPressure checks the number of incidents and compares it to the pdPressure value.
+// CheckPDPressure checks the number of incidents and compares it to the Pressure value.
 // It initializes a swarm of the value is exceeded.
 func (p *PDHelper) CheckPDPressure() (bool, error) {
 	// get primary on-call

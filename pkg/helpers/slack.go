@@ -7,6 +7,7 @@ import (
 	"github.com/slack-go/slack"
 )
 
+// SlackHelper helps configure a client and stores data captured from Slack
 type SlackHelper struct {
 	Client    *slack.Client
 	Username  string
