@@ -82,13 +82,13 @@ func main() {
 					// type case to correct event type
 					command, ok := event.Data.(slack.SlashCommand)
 					if !ok {
-						log.Printf("Cloud not type cast message to a SlashCommand: %v/n", command)
+						log.Printf("Cloud not type cast message to a SlashCommand: %v\n", command)
 					}
 					// Currently only handling slash commands but other event types could be added
 					// in this switch like bot mentions and such
 					payload, err := handlers.HandleSlashCommand(command, helper)
 					if err != nil {
-						log.Fatal(err)
+						log.Printf("failed to handle slash command: %v\n", err)
 					}
 					// don't forget to ack it
 					socketClient.Ack(*event.Request, payload)
